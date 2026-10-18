@@ -1,0 +1,1 @@
+An automated AWS Glue PySpark ETL job that extracts raw patient records from Amazon S3, unions multiple datasets, standardizes schema types, and aggregates average patient age grouped by medical diagnosis. Output is optimized in Parquet format and cataloged for serverless querying via Amazon Athena.
