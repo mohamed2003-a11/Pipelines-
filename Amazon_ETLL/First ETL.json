@@ -1,0 +1,42 @@
+{
+  "name" : "First ETL",
+  "jobMode" : "VISUAL",
+  "description" : "",
+  "role" : "arn:aws:iam::736969242457:role/service-role/AWSGlueServiceRole-MoGlueCrawlerRole",
+  "executionProperty" : {
+    "maxConcurrentRuns" : 1
+  },
+  "command" : {
+    "name" : "glueetl",
+    "scriptLocation" : "s3://motheanalystbucket/patient_data/First ETL.py",
+    "pythonVersion" : "3"
+  },
+  "defaultArguments" : {
+    "--enable-metrics" : "",
+    "--enable-spark-ui" : "true",
+    "--spark-event-logs-path" : "s3://aws-glue-assets-736969242457-us-east-1/sparkHistoryLogs/",
+    "--enable-job-insights" : "true",
+    "--enable-observability-metrics" : "true",
+    "--conf" : "spark.eventLog.rolling.enabled=true --conf spark.sql.catalog.glue_catalog.glue.skip-name-validation=true",
+    "--enable-glue-datacatalog" : "",
+    "--enable-continuous-cloudwatch-log" : "true",
+    "--job-bookmark-option" : "job-bookmark-disable",
+    "--job-language" : "python",
+    "--TempDir" : "s3://aws-glue-assets-736969242457-us-east-1/temporary/"
+  },
+  "maxRetries" : 0,
+  "allocatedCapacity" : 10,
+  "timeout" : 480,
+  "maxCapacity" : 10.0,
+  "glueVersion" : "5.1",
+  "numberOfWorkers" : 10,
+  "workerType" : "G.1X",
+  "executionClass" : "STANDARD",
+  "codeGenConfigurationNodes" : "{\"node-1792324386816\":{\"S3CsvSource\":{\"AdditionalOptions\":{\"EnableSamplePath\":false,\"SamplePath\":\"s3://motheanalystbucket/patient_data/data.csv\"},\"Escaper\":\"\",\"Exclusions\":[],\"Name\":\"Patient Data 2\",\"OptimizePerformance\":false,\"OutputSchemas\":[{\"Columns\":[{\"Name\":\"patient id\",\"Type\":\"string\"},{\"Name\":\"name\",\"Type\":\"string\"},{\"Name\":\"age\",\"Type\":\"string\"},{\"Name\":\"diagnosis\",\"Type\":\"string\"},{\"Name\":\"treatment\",\"Type\":\"string\"},{\"Name\":\"files\",\"Type\":\"string\"}]}],\"Paths\":[\"s3://motheanalystbucket/patient_data/data.csv\"],\"QuoteChar\":\"quote\",\"Recurse\":true,\"Separator\":\"comma\",\"WithHeader\":true}},\"node-1792324497889\":{\"Union\":{\"Inputs\":[\"node-1792323935838\",\"node-1792324386816\"],\"Name\":\"Union\",\"UnionType\":\"ALL\"}},\"node-1792325284884\":{\"Aggregate\":{\"Aggs\":[{\"AggFunc\":\"avg\",\"Column\":[\"age\"]}],\"Groups\":[[\"diagnosis\"]],\"Inputs\":[\"node-1792325383565\"],\"Name\":\"Aggregate\"}},\"node-1792323935838\":{\"S3CsvSource\":{\"AdditionalOptions\":{\"EnableSamplePath\":false,\"SamplePath\":\"s3://motheanalystbucket/patient_data/data - Copy.csv\"},\"Escaper\":\"\",\"Exclusions\":[],\"Name\":\"Patient Data 1\",\"OptimizePerformance\":false,\"OutputSchemas\":[{\"Columns\":[{\"Name\":\"patient id\",\"Type\":\"string\"},{\"Name\":\"name\",\"Type\":\"string\"},{\"Name\":\"age\",\"Type\":\"string\"},{\"Name\":\"diagnosis\",\"Type\":\"string\"},{\"Name\":\"treatment\",\"Type\":\"string\"},{\"Name\":\"files\",\"Type\":\"string\"}]}],\"Paths\":[\"s3://motheanalystbucket/patient_data/data - Copy.csv\"],\"QuoteChar\":\"quote\",\"Separator\":\"comma\",\"WithHeader\":true}},\"node-1792326433675\":{\"S3GlueParquetTarget\":{\"AutoDataQuality\":{\"EvaluationContext\":\"EvaluateDataQuality_node1792325982005\",\"IsEnabled\":true},\"Compression\":\"snappy\",\"Inputs\":[\"node-1792325284884\"],\"Name\":\"Amazon S3\",\"NumberTargetPartitions\":\"0\",\"PartitionKeys\":[],\"Path\":\"s3://motheanalystbucket/output_parquet/\",\"SchemaChangePolicy\":{\"Database\":\"healthcaredata\",\"EnableUpdateCatalog\":true,\"Table\":\"first_etl_output\",\"UpdateBehavior\":\"LOG\"}}},\"node-1792325383565\":{\"ApplyMapping\":{\"Inputs\":[\"node-1792324497889\"],\"Mapping\":[{\"Dropped\":false,\"FromPath\":[\"patient id\"],\"FromType\":\"string\",\"ToKey\":\"patient id\",\"ToType\":\"int\"},{\"Dropped\":false,\"FromPath\":[\"name\"],\"FromType\":\"string\",\"ToKey\":\"name\",\"ToType\":\"string\"},{\"Dropped\":false,\"FromPath\":[\"age\"],\"FromType\":\"string\",\"ToKey\":\"age\",\"ToType\":\"int\"},{\"Dropped\":false,\"FromPath\":[\"diagnosis\"],\"FromType\":\"string\",\"ToKey\":\"diagnosis\",\"ToType\":\"string\"},{\"Dropped\":false,\"FromPath\":[\"treatment\"],\"FromType\":\"string\",\"ToKey\":\"treatment\",\"ToType\":\"string\"},{\"Dropped\":false,\"FromPath\":[\"files\"],\"FromType\":\"string\",\"ToKey\":\"files\",\"ToType\":\"int\"}],\"Name\":\"Change Schema\"}}}",
+  "sourceControlDetails" : {
+    "provider" : "GITHUB",
+    "repository" : "Pipelines-",
+    "branch" : "main",
+    "folder" : "Amazon_ETLL"
+  }
+}
